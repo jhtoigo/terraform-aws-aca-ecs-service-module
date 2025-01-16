@@ -73,4 +73,7 @@ variable "scale_in_evaluation_periods" {}
 
 variable "scale_in_cooldown" {}
 
+# Autoscaling tracking CPU
+
+variable "scale_tracking_cpu" {}
 

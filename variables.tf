@@ -77,3 +77,7 @@ variable "scale_in_cooldown" {}
 
 variable "scale_tracking_cpu" {}
 
+# Autoscaling tracking requests
+variable "alb_arn" {}
+
+variable "scale_tracking_requests" {}

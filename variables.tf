@@ -2,6 +2,11 @@ variable "region" {}
 
 variable "service_name" {}
 
+variable "container_image" {
+  type        = string
+  description = "Image with tag for deploying the application to ECS"
+}
+
 variable "cluster_name" {}
 
 variable "vpc_id" {}
@@ -29,7 +34,16 @@ variable "capabilities" {
 
 variable "service_healthcheck" {}
 
-variable "service_launch_type" {}
+variable "service_launch_type" {
+  type = list(object({
+    capacity_provider = string
+    weight            = number
+  }))
+  default = [{
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 100
+  }]
+}
 
 variable "service_task_count" {}
 

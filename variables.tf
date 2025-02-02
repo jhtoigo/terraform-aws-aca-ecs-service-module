@@ -238,3 +238,10 @@ variable "secrets" {
   description = "List of secrets to be retrieved from AWS Secrets Manager or SSM Parameter Store"
   default     = []
 }
+
+variable "service_discovery_namespace" {
+  type        = string
+  description = "Name of the service discovery namespace for the service"
+  default     = null
+
+}

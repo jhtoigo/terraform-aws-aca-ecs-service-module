@@ -146,3 +146,12 @@ variable "efs_volumes" {
   }))
   default = []
 }
+
+variable "secrets" {
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
+  description = "List of variables to be stored in AWS Secrets Manager or SSM Parameter Store"
+  default     = []
+}

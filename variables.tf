@@ -1,139 +1,221 @@
-variable "region" {}
+variable "region" {
+  type        = string
+  description = "AWS region where resources will be created"
+}
 
-variable "service_name" {}
+variable "service_name" {
+  type        = string
+  description = "Name of the ECS service"
+}
 
 variable "container_image" {
   type        = string
   description = "Image with tag for deploying the application to ECS"
 }
 
-variable "cluster_name" {}
+variable "cluster_name" {
+  type        = string
+  description = "Name of the ECS cluster where the service will be deployed"
+}
 
-variable "vpc_id" {}
+variable "vpc_id" {
+  type        = string
+  description = "ID of the VPC where resources will be created"
+}
 
-variable "private_subnets" {}
+variable "private_subnets" {
+  type        = list(string)
+  description = "List of private subnet IDs where the ECS tasks will be placed"
+}
 
-variable "service_port" {}
+variable "service_port" {
+  type        = number
+  description = "Port number on which the container will receive traffic"
+}
 
-variable "service_cpu" {}
+variable "service_cpu" {
+  type        = number
+  description = "Amount of CPU units to allocate for the service"
+}
 
-variable "service_memory" {}
+variable "service_memory" {
+  type        = number
+  description = "Amount of memory (in MiB) to allocate for the service"
+}
 
-variable "service_listener" {}
+variable "service_listener" {
+  type        = string
+  description = "ARN of the ALB listener for the service"
+}
 
-variable "service_task_execution_role" {}
-
+variable "service_task_execution_role" {
+  type        = string
+  description = "ARN of the IAM role that the ECS task will use for execution"
+}
 
 variable "environment_variables" {
-  type = list(any)
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  description = "List of environment variables to be passed to the container"
+  default     = []
 }
 
 variable "capabilities" {
-
+  type        = list(string)
+  description = "List of additional capabilities required for the task"
 }
 
-variable "service_healthcheck" {}
+variable "service_healthcheck" {
+  type        = map(any)
+  description = "Configuration for the service health check"
+}
 
 variable "service_launch_type" {
   type = list(object({
     capacity_provider = string
     weight            = number
   }))
+  description = "Configuration for the service launch type and capacity provider strategy"
   default = [{
     capacity_provider = "FARGATE_SPOT"
     weight            = 100
   }]
 }
 
-variable "service_task_count" {}
+variable "service_task_count" {
+  type        = number
+  description = "Desired number of tasks to run in the service"
+}
 
-variable "service_hosts" {}
+variable "service_hosts" {
+  type        = list(string)
+  description = "List of host names for the service"
+}
 
-# Autoscaling
-
+# Autoscaling variables
 variable "scale_type" {
-  default = null
+  type        = string
+  description = "Type of autoscaling to use (e.g., 'target' or 'step')"
+  default     = null
 }
 
 variable "task_minimum" {
-  default = 3
+  type        = number
+  description = "Minimum number of tasks to maintain"
+  default     = 3
 }
 
 variable "task_maximum" {
-  default = 10
+  type        = number
+  description = "Maximum number of tasks allowed"
+  default     = 10
 }
 
-# Autoscaling CPU
-
+# Autoscaling CPU variables
 variable "scale_out_cpu_threshold" {
-  default = 80
+  type        = number
+  description = "CPU threshold percentage to trigger scale out"
+  default     = 80
 }
 
 variable "scale_out_adjustment" {
-  default = 1
+  type        = number
+  description = "Number of tasks to add during scale out"
+  default     = 1
 }
 
 variable "scale_out_comparison_operator" {
-  default = "GreaterThanOrEqualToThreshold"
+  type        = string
+  description = "Comparison operator for scale out condition"
+  default     = "GreaterThanOrEqualToThreshold"
 }
 
 variable "scale_out_statistic" {
-  default = "Average"
+  type        = string
+  description = "Statistic to use for scale out evaluation"
+  default     = "Average"
 }
 
 variable "scale_out_period" {
-  default = 60
+  type        = number
+  description = "Period in seconds over which the scale out statistic is applied"
+  default     = 60
 }
 
 variable "scale_out_evaluation_periods" {
-  default = 2
+  type        = number
+  description = "Number of periods to evaluate for scale out"
+  default     = 2
 }
 
 variable "scale_out_cooldown" {
-  default = 60
+  type        = number
+  description = "Cooldown period in seconds after scale out"
+  default     = 60
 }
 
 variable "scale_in_cpu_threshold" {
-  default = 30
+  type        = number
+  description = "CPU threshold percentage to trigger scale in"
+  default     = 30
 }
 
 variable "scale_in_adjustment" {
-  default = -1
+  type        = number
+  description = "Number of tasks to remove during scale in"
+  default     = -1
 }
 
 variable "scale_in_comparison_operator" {
-  default = "LessThanOrEqualToThreshold"
+  type        = string
+  description = "Comparison operator for scale in condition"
+  default     = "LessThanOrEqualToThreshold"
 }
 
 variable "scale_in_statistic" {
-  default = "Average"
+  type        = string
+  description = "Statistic to use for scale in evaluation"
+  default     = "Average"
 }
 
 variable "scale_in_period" {
-  default = 120
+  type        = number
+  description = "Period in seconds over which the scale in statistic is applied"
+  default     = 120
 }
 
 variable "scale_in_evaluation_periods" {
-  default = 3
+  type        = number
+  description = "Number of periods to evaluate for scale in"
+  default     = 3
 }
 
 variable "scale_in_cooldown" {
-  default = 120
+  type        = number
+  description = "Cooldown period in seconds after scale in"
+  default     = 120
 }
 
 # Autoscaling tracking CPU
-
 variable "scale_tracking_cpu" {
-  default = 80
+  type        = number
+  description = "Target CPU utilization percentage for tracking-based autoscaling"
+  default     = 80
 }
 
 # Autoscaling tracking requests
 variable "alb_arn" {
-  default = null
+  type        = string
+  description = "ARN of the Application Load Balancer for request-based scaling"
+  default     = null
 }
 
 variable "scale_tracking_requests" {
-  default = 0
+  type        = number
+  description = "Target number of requests per target for tracking-based autoscaling"
+  default     = 0
 }
 
 variable "efs_volumes" {
@@ -144,7 +226,8 @@ variable "efs_volumes" {
     mount_point      = string
     readonly         = bool
   }))
-  default = []
+  description = "Configuration for EFS volumes to be mounted in the container"
+  default     = []
 }
 
 variable "secrets" {
@@ -152,6 +235,6 @@ variable "secrets" {
     name      = string
     valueFrom = string
   }))
-  description = "List of variables to be stored in AWS Secrets Manager or SSM Parameter Store"
+  description = "List of secrets to be retrieved from AWS Secrets Manager or SSM Parameter Store"
   default     = []
 }

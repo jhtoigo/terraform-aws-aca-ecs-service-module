@@ -46,6 +46,7 @@ variable "service_memory" {
 variable "service_listener" {
   type        = string
   description = "ARN of the ALB listener for the service"
+  default     = null
 }
 
 variable "service_task_execution_role" {
@@ -65,6 +66,7 @@ variable "environment_variables" {
 variable "capabilities" {
   type        = list(string)
   description = "List of additional capabilities required for the task"
+  default     = []
 }
 
 variable "service_healthcheck" {
